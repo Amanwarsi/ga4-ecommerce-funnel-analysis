@@ -29,7 +29,7 @@
 * Channel-level performance (organic, paid, direct, referral)
 * Device-level behavior (desktop, mobile, tablet)
 * Session-level and event-level analysis using GA4 clickstream data
-* Time-based trends within the available dataset (~3 months)
+* Time-based trends within the available dataset (Nov 1, 2020 → Jan 31, 2021)
 
 **Out of scope:**
 
