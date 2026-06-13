@@ -45,7 +45,7 @@
 
 * Dataset: `bigquery-public-data.ga4_obfuscated_sample_ecommerce`
 * Platform: Google BigQuery
-* 
+
 ### Data Overview
 
 * **Date Range:** 2020-11-01 to 2021-01-31 
