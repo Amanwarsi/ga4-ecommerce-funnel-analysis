@@ -44,11 +44,11 @@
 ### Data Source
 
 * Dataset: `bigquery-public-data.ga4_obfuscated_sample_ecommerce`
-* Platform: Google BigQuery (Sandbox — no billing required)
-
+* Platform: Google BigQuery
+* 
 ### Data Overview
 
-* **Date Range:** 2020-11-01 to 2021-01-31 (~3 months)
+* **Date Range:** 2020-11-01 to 2021-01-31 
 * **Total Events:** ~4.3 million
 * **Total Users:** ~270K
 * **Grain:** One row represents a single user event
