@@ -1,7 +1,7 @@
 
 # GA4 E-commerce Funnel & Channel Analysis
 
-**Status:** 🟡 Phase 0 — Business Brief (in progress: data profiling next)
+## Phase 0 — Business Brief
 
 ## Business Brief
 
@@ -37,6 +37,43 @@
 * Post-purchase experience (delivery, returns, satisfaction) — dataset only covers pre-purchase events
 * Customer lifetime value (LTV) — limited ability to track users across long time horizons due to anonymized IDs
 * Cross-device tracking — users cannot be reliably linked across multiple devices
+
+----
+
+## Phase 1 — Data Acquisition & Profiling
+### Data Source
+
+* Dataset: `bigquery-public-data.ga4_obfuscated_sample_ecommerce`
+* Platform: Google BigQuery (Sandbox — no billing required)
+
+### Data Overview
+
+* **Date Range:** 2020-11-01 to 2021-01-31 (~3 months)
+* **Total Events:** ~4.3 million
+* **Total Users:** ~270K
+* **Grain:** One row represents a single user event
+
+### Key Observations
+
+* The dataset is **event-based**, meaning each user interaction (e.g., page_view, add_to_cart, purchase) is stored as a separate row
+* Top events are dominated by **browsing behavior** (page_view, scroll, user_engagement), while purchase-related events occur less frequently
+
+### Data Structure Insights
+
+* Contains **nested and repeated fields** (e.g., `event_params`, `items`) requiring the use of `UNNEST()` for extraction
+* Data is **denormalized**, multiple attributes are embedded within single columns
+
+### Initial Segmentation Findings
+
+* **Organic traffic** is the dominant acquisition channel across both desktop and mobile
+* **Desktop users** contribute the highest share of traffic, followed by mobile; tablet usage is minimal
+* Direct traffic (`(none)`) also represents a significant portion, indicating strong brand recall
+
+### Outcome of Phase 1
+
+* Established a clear understanding of dataset structure, scale, and limitations
+* Identified key fields required for funnel and channel analysis
+* Prepared groundwork for SQL-based data transformation in the next phase
 
 ## Stack
 
