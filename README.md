@@ -75,6 +75,63 @@
 * Identified key fields required for funnel and channel analysis
 * Prepared groundwork for SQL-based data transformation in the next phase
 
+---
+
+## Phase 2 — SQL Transformation
+
+### Objective
+
+Transform raw, nested GA4 event data into clean, structured datasets for funnel, channel, and revenue analysis.
+
+### Key Transformations
+
+#### 1. Funnel Construction (Session-Level)
+
+* Identified whether a session reached key stages:
+
+  * view_item → add_to_cart → begin_checkout → purchase
+* Used boolean flags (0/1) to represent stage completion
+* Aggregated to calculate total funnel counts and conversion rates
+
+#### 2. Channel-Level Conversion Analysis
+
+* Segmented sessions by `traffic_source.medium`
+* Calculated:
+
+  * Total sessions
+  * Purchases
+  * Conversion rate (%)
+
+#### 3. Revenue & AOV Analysis
+
+* Extracted `ecommerce.purchase_revenue` for purchase events
+* Calculated:
+
+  * Total revenue by channel
+  * Average Order Value (AOV = revenue ÷ purchases)
+
+### Key Insights
+
+* **Traffic ≠ Quality**
+  Organic drives the highest traffic but has lower conversion rates
+
+* **Referral traffic shows higher intent**
+  Fewer sessions but significantly better conversion and higher value
+
+* **Paid traffic (CPC) underperforms**
+  Lowest conversion rate despite being a paid channel → requires optimization
+
+* **Data quality matters**
+  Excluded channels like *(data deleted)* and *<Other>* due to unreliable attribution
+
+### Outcome of Phase 2
+
+* Created clean datasets for funnel, conversion, and revenue analysis
+* Transformed raw GA4 data into **business-ready insights**
+* Established a strong foundation for dashboarding and storytelling
+
+---
+
 ## Stack
 
 BigQuery (SQL) · GA4 public dataset · Looker Studio · GitHub
