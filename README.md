@@ -46,7 +46,11 @@ Despite increasing user sessions, conversions remain low and unpredictable. Stev
 
 4. **No device penalty:** Mobile (~40% of traffic) converts on par with desktop (~6.5% vs ~6.1%), meaning funnel issues are **device-agnostic**, not UX-specific.
 
-5. **High-interest products fail to convert:** Multiple products have **30K–50K+ views but near-zero purchases**, indicating strong demand but broken conversion (pricing, UX, or availability issues).
+5. **High-interest products underconvert — with a caveat:** Several products
+   draw 30K–50K+ views but very few (sometimes zero) recorded purchases.
+   Products with *low-but-nonzero* conversion are genuine optimization targets;
+   the *exact-zero* cases are flagged for data validation (possible item-name
+   mismatch between view and purchase events) before acting.
 
 ---
 
