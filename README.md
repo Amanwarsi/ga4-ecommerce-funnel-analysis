@@ -109,13 +109,6 @@ ga4-ecommerce-funnel-analysis/
 └── LICENSE
 ```
 
----
-
-## Final Thoughts
-
-This project demonstrates how raw clickstream data can be transformed into **clear business decisions**.
-
-The focus was not just on writing SQL, but on:
 
 * Asking the right questions
 * Challenging assumptions
