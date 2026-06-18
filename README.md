@@ -1,141 +1,124 @@
-
 # GA4 E-commerce Funnel & Channel Analysis
 
-## Phase 0 — Business Brief
+**[🔗 View the live interactive dashboard](https://datastudio.google.com/reporting/918adeb6-ea43-445e-ae17-96ac21db6156)**
 
-## Business Brief
+*One-line hook:* Analysis of ~350K sessions of Google Merchandise Store clickstream data to identify funnel drop-offs, channel efficiency, and revenue drivers.
 
-**Stakeholder:** Steve, Marketing Manager at a mid-size D2C e-commerce company
-
-**Problem:** Website traffic is growing, but conversions and revenue are inconsistent. The marketing team lacks visibility into where users drop off in the purchase journey and which channels drive high-quality traffic.
-
-**Key Question:** Where do users drop off in the purchase funnel, and which acquisition channels generate the highest conversion and revenue?
-
-## KPIs
-
-| # | KPI                       | Formula                                                                | Why it matters                                                 |
-| - | ------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------- |
-| 1 | Session Conversion Rate   | purchases ÷ sessions                                                   | Measures overall efficiency of converting visitors into buyers |
-| 2 | Funnel Drop-off Rate      | (users at previous step − users at next step) ÷ users at previous step | Identifies where users abandon the purchase journey            |
-| 3 | Channel Conversion Rate   | purchases (by channel) ÷ sessions (by channel)                         | Compares effectiveness of each acquisition channel             |
-| 4 | Revenue by Channel        | sum of purchase revenue grouped by channel                             | Highlights which channels drive actual revenue                 |
-| 5 | Average Order Value (AOV) | total revenue ÷ number of purchases                                    | Indicates the value and quality of transactions                |
-
-## Scope
-
-**In scope:**
-
-* Analysis of the purchase funnel (view_item → add_to_cart → begin_checkout → purchase)
-* Channel-level performance (organic, paid, direct, referral)
-* Device-level behavior (desktop, mobile, tablet)
-* Session-level and event-level analysis using GA4 clickstream data
-* Time-based trends within the available dataset (Nov 1, 2020 → Jan 31, 2021)
-
-**Out of scope:**
-
-* Marketing ROI and profitability — no cost data available for acquisition channels
-* Post-purchase experience (delivery, returns, satisfaction) — dataset only covers pre-purchase events
-* Customer lifetime value (LTV) — limited ability to track users across long time horizons due to anonymized IDs
-* Cross-device tracking — users cannot be reliably linked across multiple devices
-
-----
-
-## Phase 1 — Data Acquisition & Profiling
-### Data Source
-
-* Dataset: `bigquery-public-data.ga4_obfuscated_sample_ecommerce`
-* Platform: Google BigQuery
-
-### Data Overview
-
-* **Date Range:** 2020-11-01 to 2021-01-31 
-* **Total Events:** ~4.3 million
-* **Total Users:** ~270K
-* **Grain:** One row represents a single user event
-
-### Key Observations
-
-* The dataset is **event-based**, meaning each user interaction (e.g., page_view, add_to_cart, purchase) is stored as a separate row
-* Top events are dominated by **browsing behavior** (page_view, scroll, user_engagement), while purchase-related events occur less frequently
-
-### Data Structure Insights
-
-* Contains **nested and repeated fields** (e.g., `event_params`, `items`) requiring the use of `UNNEST()` for extraction
-* Data is **denormalized**, multiple attributes are embedded within single columns
-
-### Initial Segmentation Findings
-
-* **Organic traffic** is the dominant acquisition channel across both desktop and mobile
-* **Desktop users** contribute the highest share of traffic, followed by mobile; tablet usage is minimal
-* Direct traffic (`(none)`) also represents a significant portion, indicating strong brand recall
-
-### Outcome of Phase 1
-
-* Established a clear understanding of dataset structure, scale, and limitations
-* Identified key fields required for funnel and channel analysis
-* Prepared groundwork for SQL-based data transformation in the next phase
+![dashboard screenshot](docs/dashboard.png)
 
 ---
 
-## Phase 2 — SQL Transformation
+## The Business Problem
 
-### Objective
+Steve, a Marketing Manager at an e-commerce brand, is facing a frustrating issue:
+**traffic is growing, but revenue feels inconsistent.**
 
-Transform raw, nested GA4 event data into clean, structured datasets for funnel, channel, and revenue analysis.
+Despite increasing user sessions, conversions remain low and unpredictable. Steve needs to understand:
 
-### Key Transformations
-
-#### 1. Funnel Construction (Session-Level)
-
-* Identified whether a session reached key stages:
-
-  * view_item → add_to_cart → begin_checkout → purchase
-* Used boolean flags (0/1) to represent stage completion
-* Aggregated to calculate total funnel counts and conversion rates
-
-#### 2. Channel-Level Conversion Analysis
-
-* Segmented sessions by `traffic_source.medium`
-* Calculated:
-
-  * Total sessions
-  * Purchases
-  * Conversion rate (%)
-
-#### 3. Revenue & AOV Analysis
-
-* Extracted `ecommerce.purchase_revenue` for purchase events
-* Calculated:
-
-  * Total revenue by channel
-  * Average Order Value (AOV = revenue ÷ purchases)
-
-### Key Insights
-
-* **Traffic ≠ Quality**
-  Organic drives the highest traffic but has lower conversion rates
-
-* **Referral traffic shows higher intent**
-  Fewer sessions but significantly better conversion and higher value
-
-* **Paid traffic (CPC) underperforms**
-  Lowest conversion rate despite being a paid channel → requires optimization
-
-* **Data quality matters**
-  Excluded channels like *(data deleted)* and *<Other>* due to unreliable attribution
-
-### Outcome of Phase 2
-
-* Created clean datasets for funnel, conversion, and revenue analysis
-* Transformed raw GA4 data into **business-ready insights**
-* Established a strong foundation for dashboarding and storytelling
+* Where users drop off in the purchase journey
+* Which channels bring buyers vs. just browsers
 
 ---
 
-## Stack
+## The Question
 
-BigQuery (SQL) · GA4 public dataset · Looker Studio · GitHub
+1. **Where do users drop out of the purchase funnel (view → cart → checkout → purchase)?**
+2. **Which acquisition channels drive high-quality traffic and revenue?**
 
-## Project Phases
+---
 
-Brief → Data Profiling → SQL Transformation → Analysis → Dashboard → Insights & Recommendations
+## Data
+
+* **Source:** GA4 Obfuscated Sample E-commerce Dataset (BigQuery Public Dataset)
+* **Scale:** ~4.3M events · ~270K users · ~350K sessions
+* **Time Range:** Nov 2020 – Jan 2021 (92 daily tables)
+* **Tools Used:** BigQuery (SQL) → Looker Studio → GitHub
+
+---
+
+## Key Findings
+
+1. **Checkout is the biggest revenue leak:** ~56% of users who *begin checkout* don’t complete the purchase — high-intent users are lost at the final step.
+
+2. **Revenue is seasonal, not inconsistent:** Peaks during **Black Friday → mid-December**, then drops sharply after the **holiday shipping cutoff**, leading to a January slump.
+
+3. **Channel quality ≠ volume:** Organic drives the most traffic, but **referral converts 51% better (1.66% vs 1.10%)**. Paid (CPC) performs worst (0.98%) despite costing money — clear inefficiency.
+
+4. **No device penalty:** Mobile (~40% of traffic) converts on par with desktop (~6.5% vs ~6.1%), meaning funnel issues are **device-agnostic**, not UX-specific.
+
+5. **High-interest products fail to convert:** Multiple products have **30K–50K+ views but near-zero purchases**, indicating strong demand but broken conversion (pricing, UX, or availability issues).
+
+---
+
+## Recommendations
+
+* **Fix checkout friction first:** Simplify payment flow, reduce steps, and optimize UX to recover high-intent users.
+
+* **Shift acquisition strategy:** Invest more in high-converting channels (referral) and audit underperforming paid campaigns (CPC).
+
+* **Plan around seasonality:**
+
+  * Increase ad spend and inventory before Black Friday and early December
+  * Use January for retention campaigns and clearance strategies
+
+* **Optimize product pages:** Improve pricing, visuals, and descriptions for high-view, low-conversion products before investing in new traffic.
+
+* **Avoid unnecessary mobile rebuilds:** Since performance is consistent across devices, focus on universal funnel improvements instead.
+
+---
+
+## How It Was Built
+
+* Built using **BigQuery SQL** to transform raw GA4 event-level data into session-level analysis tables
+* Created a **session_summary table** to track funnel progression and revenue
+* Conducted 3 deep-dive analyses:
+
+  * Funnel performance by device
+  * Revenue seasonality trends
+  * Product-level conversion gaps
+* Designed an interactive dashboard in **Looker Studio** to present insights
+
+Explore SQL queries in [`/sql`](sql/)
+Explore detailed insights in [`/docs`](docs/)
+
+---
+
+## Repo Structure
+
+```bash
+ga4-ecommerce-funnel-analysis/
+│
+├── docs/
+│   ├── dashboard.png
+│   ├── data_dictionary.md
+│   ├── insight #1.md
+│   ├── insight #2.md
+│   └── insight #3.md
+│
+├── sql/
+│   ├── 01_funnel_overview.sql
+│   ├── 02_channel_conversion.sql
+│   ├── 03_revenue_by_channel.sql
+│   ├── 04_funnel_by_device.sql
+│   ├── 05_view_vs_purchase_products.sql
+│   ├── 06_daily_revenue_trend.sql
+│   ├── 07_session_summary_table.sql
+│   └── 08_funnel_steps_long.sql
+│
+├── README.md
+└── LICENSE
+```
+
+---
+
+## Final Thoughts
+
+This project demonstrates how raw clickstream data can be transformed into **clear business decisions**.
+
+The focus was not just on writing SQL, but on:
+
+* Asking the right questions
+* Challenging assumptions
+* Translating data into actionable insights
+
+---
