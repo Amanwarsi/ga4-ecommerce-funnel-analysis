@@ -91,9 +91,9 @@ ga4-ecommerce-funnel-analysis/
 ├── docs/
 │   ├── dashboard.png
 │   ├── data_dictionary.md
-│   ├── insight #1.md
-│   ├── insight #2.md
-│   └── insight #3.md
+│   ├── insight_1.md
+│   ├── insight_2.md
+│   └── insight_3.md
 │
 ├── sql/
 │   ├── 01_funnel_overview.sql
