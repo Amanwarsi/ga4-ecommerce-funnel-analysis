@@ -113,9 +113,3 @@ ga4-ecommerce-funnel-analysis/
 └── LICENSE
 ```
 
-
-* Asking the right questions
-* Challenging assumptions
-* Translating data into actionable insights
-
----
